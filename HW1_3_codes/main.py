@@ -7,6 +7,7 @@ from UserStatsUserController import UserStatsHistoryController
 from users_online_predictor import UserOnlinePredictor
 from user_online_predictor import UserOnlinePredictorWithPrediction
 from HW4.UserOnlineTimeCalculator import UserTotalTimeOnlineTracker
+from HW4.user_average_time_tracker import UserAverageTimeTracker
 
 def main():
     custom_base_url = "https://sef.podkolzin.consulting/api/users/lastSeen"
@@ -32,8 +33,11 @@ def main():
 
     app = user_online_time_tracker.create_flask_app()
 
+    user_average_time_tracker = UserAverageTimeTracker(custom_users)
+    app2 = user_average_time_tracker.create_flask_app()
+
     while True:
-        print("Enter '1' to check users online stats, '2' to get user history, '3' to list all users, '4' to predict online of users, '5' to predict online status of a specific user, '6' to get total online time for a specific user, or 'q' to quit: ")
+        print("Enter '1' to check users online stats, '2' to get user history, '3' to list all users, '4' to predict online of users, '5' to predict online status of a specific user, '6' to get total online time for a specific user, '7' to get avarage online time for a specific user, or 'q' to quit: ")
         command = input()
 
         if command == '1':
@@ -73,10 +77,16 @@ def main():
             user_id = input("Enter the user ID: ")
             total_time_online = user_online_time_tracker.get_total_time_online(user_id)
             print(f"Total time online for user {user_id}: {total_time_online['totalTime']} seconds")
+        elif command == '7':
+            user_id = input("Enter the user ID: ")
+            daily_average = user_average_time_tracker.calculate_daily_average(user_id)
+            weekly_average = user_average_time_tracker.calculate_weekly_average(user_id)
+            print(f"Daily Average: {daily_average} seconds")
+            print(f"Weekly Average: {weekly_average} seconds")
         elif command == 'q':
             break
         else:
-            print("Invalid command. Please enter '1', '2', '3', '4', '5', '6', or 'q'.")
+            print("Invalid command. Please enter '1', '2', '3', '4', '5', '6', '7' or 'q'.")
 
 if __name__ == "__main__":
     main()
