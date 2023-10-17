@@ -8,6 +8,8 @@ from users_online_predictor import UserOnlinePredictor
 from user_online_predictor import UserOnlinePredictorWithPrediction
 from HW4.UserOnlineTimeCalculator import UserTotalTimeOnlineTracker
 from HW4.user_average_time_tracker import UserAverageTimeTracker
+from HW4.user_forget_data import UserForgetDataHandler
+
 
 def main():
     custom_base_url = "https://sef.podkolzin.consulting/api/users/lastSeen"
@@ -35,6 +37,9 @@ def main():
 
     user_average_time_tracker = UserAverageTimeTracker(custom_users)
     app2 = user_average_time_tracker.create_flask_app()
+
+    user_forget_data_handler = UserForgetDataHandler(custom_users)
+    app3 = user_forget_data_handler.create_flask_app()
 
     while True:
         print("Enter '1' to check users online stats, '2' to get user history, '3' to list all users, '4' to predict online of users, '5' to predict online status of a specific user, '6' to get total online time for a specific user, '7' to get avarage online time for a specific user, or 'q' to quit: ")
@@ -83,6 +88,13 @@ def main():
             weekly_average = user_average_time_tracker.calculate_weekly_average(user_id)
             print(f"Daily Average: {daily_average} seconds")
             print(f"Weekly Average: {weekly_average} seconds")
+        elif command == '8':
+            user_id = input("Enter the user ID to forget: ")
+            deleted_user = user_forget_data_handler.forget_user_data(user_id)
+            if deleted_user:
+                print(f"User {user_id} data has been forgotten.")
+            else:
+                print(f"User {user_id} not found.")
         elif command == 'q':
             break
         else:
@@ -90,3 +102,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    app.run(host='0.0.0.0', port=5000)
+    app2.run(host='0.0.0.0', port=5000)
+    app3.run(host='0.0.0.0', port=5000)
