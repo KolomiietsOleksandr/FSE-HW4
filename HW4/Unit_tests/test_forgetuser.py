@@ -4,7 +4,6 @@ from HW1_3_codes.user import CustomUser
 
 class TestUserForgetDataHandler(unittest.TestCase):
     def setUp(self):
-        # Create a list of custom users for testing
         self.custom_users = [
             CustomUser("user1", "2023-10-18T08:00:00.000", True, None),
             CustomUser("user2", "2023-10-18T09:00:00.000", False, None),
